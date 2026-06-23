@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>จัดการข้อมูล - ศูนย์รวมข้อมูลทีม CS</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
+
+    <style>
+        /* ================= ตัวแปรสีและขนาด (จากของเดิม) ================= */
+        :root {
+            --primary-color: #1a73e8;
+            --primary-hover: #1557b0; 
+            --bg-color: #f0f4f8;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-muted: #5f6368;
+            --sidebar-width: 260px;
+        }
+
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px 20px 40px calc(var(--sidebar-width) + 40px); 
+        }
+
+        /* ================= Navbar ด้านซ้าย (จากของเดิม) ================= */
+        .navbar {
+            background-color: var(--card-bg);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.08);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: 15px;
+            padding: 30px 20px;
+            z-index: 1000;
+            box-sizing: border-box;
+            overflow-y: auto;   
+        }
+
+        .menu-header {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: var(--primary-color);
+            padding: 0 16px;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .navbar a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 400;
+            padding: 12px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: block;
+            line-height: 1.4;
+        }
+
+        .navbar a:hover {
+            background-color: #f1f3f4;
+            color: var(--primary-color);
+        }
+
+        /* ================= เลย์เอาต์หลัก ================= */
+        .content-container {
+            max-width: 1200px; 
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* ================= Responsive (มือถือ) ================= */
+        @media (max-width: 768px) {
+            body {
+                padding: 120px 20px 40px 20px;
+            }
+            .navbar {
+                width: 100%;
+                height: auto;
+                flex-direction: row;
+                overflow-x: auto;
+                white-space: nowrap;
+                padding: 15px 20px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="menu-header">MENU</div>
+        <a href="https://porpaperclip-lab.github.io/csteamknowledgebase/#" target="_self"><span class="material-symbols-outlined" style="font-size: 20px; vertical-align: middle; margin-right: 8px; color: #1a73e8;">home_work</span>ศูนย์รวมข้อมูลทีม CS</a>
+        <a href="https://porpaperclip-lab.github.io/csteam-trainer/" target="_self"><span class="material-symbols-outlined" style="font-size: 20px; vertical-align: middle; margin-right: 8px; color: #1a73e8;">schema</span>โครงสร้างผลิตภัณฑ์</a>
+        <a href="https://porpaperclip-lab.github.io/emailbriefing" target="_self"><span class="material-symbols-outlined" style="font-size: 20px; vertical-align: middle; margin-right: 8px; color: #1a73e8;">attach_email</span>อีเมลประกาศสำคัญ</a>
+        <a href="https://porpaperclip-lab.github.io/consolidatework-relatedlinks/" target="_self"><span class="material-symbols-outlined" style="font-size: 20px; vertical-align: middle; margin-right: 8px; color: #1a73e8;">dataset_linked</span>รวม Link ในการทำงาน</a>
+        <a href="https://porpaperclip-lab.github.io/csteamfaq/" target="_self"><span class="material-symbols-outlined" style="font-size: 20px; vertical-align: middle; margin-right: 8px; color: #1a73e8;">quiz</span>FAQ</a>
+    </nav>
+
+    <div class="content-container">
+        
+        <section class="bg-white rounded-2xl shadow-sm py-10 px-6 sm:px-10 lg:px-12 my-6">
+            
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-2 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-blue-600">database</span>
+                    ตารางข้อมูลประกอบการทำงานทีม CS
+                </h2>
+                <p class="text-sm text-gray-500">
+                    ระบบค้นหาอัจฉริยะ: ค้นหาด้วยคำใกล้เคียง พากย์ย่อ หรือคำที่พิมพ์ผิดได้แบบ Real-time
+                </p>
+            </div>
+
+            <div class="mb-6 max-w-md">
+                <div class="relative rounded-md shadow-sm">
+                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                        <span class="material-symbols-outlined text-gray-400" style="font-size: 20px;">search</span>
+                    </div>
+                    <input type="text" id="searchInput" 
+                           class="block w-full rounded-lg border border-gray-300 bg-gray-50 py-2.5 pl-10 pr-4 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 outline-none transition-all" 
+                           placeholder="ลองพิมพ์ค้นหา (เช่น เงิน, มอไซค์, เคม, รพ)...">
+                </div>
+            </div>
+
+            <div class="overflow-x-auto border border-gray-200 rounded-xl">
+                <table class="min-w-full divide-y divide-gray-200 text-sm text-left" id="dataTable">
+                    <thead class="bg-gray-800 text-white font-medium">
+                        <tr>
+                            <th scope="col" class="px-6 py-4 whitespace-nowrap">ลำดับ</th>
+                            <th scope="col" class="px-6 py-4">หัวข้อข้อสงสัย / เอกสาร</th>
+                            <th scope="col" class="px-6 py-4 whitespace-nowrap">แผนก/หมวดหมู่</th>
+                            <th scope="col" class="px-6 py-4">ผู้รับผิดชอบ / ช่องทาง</th>
+                            <th scope="col" class="px-6 py-4 whitespace-nowrap">ระยะเวลาดำเนินการ (SLA)</th>
+                            <th scope="col" class="px-6 py-4">หมายเหตุ / ลิงก์เพิ่มเติม</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 bg-white">
+                        <tr class="hover:bg-gray-50 transition-colors" data-synonyms="รถ มอเตอร์ไซค์ ซ่อม อู่ มอไซค์ ยานพาหนะ เคลม คุมราคา">
+                            <td class="px-6 py-4 font-medium text-gray-950">1</td>
+                            <td class="px-6 py-4 text-gray-700 font-medium">เอกสารคุมราคารถยนต์ และ รถจักรยานยนต์</td>
+                            <td class="px-6 py-4"><span class="bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full text-xs font-medium">Motor Claim</span></td>
+                            <td class="px-6 py-4 text-gray-500">อู่/ศูนย์ นอกเครือ</td>
+                            <td class="px-6 py-4 text-gray-600 font-medium">ภายใน 7-15 วันทำการ</td>
+                            <td class="px-6 py-4 text-sm text-gray-400 italic">กรณีอู่ตั้งเบิกแทนต้องใช้หนังสือมอบอำนาจ</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 transition-colors" data-synonyms="เงิน สำรองจ่าย พรบ รพ แพทย์ รักษา เบิกจ่าย บัญชี โอน จ่ายคืน">
+                            <td class="px-6 py-4 font-medium text-gray-950">2</td>
+                            <td class="px-6 py-4 text-gray-700 font-medium">เอกสารตั้งเบิกค่ารักษาพยาบาล พ.ร.บ.</td>
+                            <td class="px-6 py-4"><span class="bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full text-xs font-medium">Motor Claim</span></td>
+                            <td class="px-6 py-4 text-blue-600 font-medium break-all">boonyarat.ph@sundayinsurance.co.th</td>
+                            <td class="px-6 py-4 text-gray-600 font-medium">ภายใน 15 วันทำการ</td>
+                            <td class="px-6 py-4 text-sm text-red-500 font-medium">ใช้สมุดบัญชีออมทรัพย์เท่านั้น (ยกเว้น ออมสิน, ธกส, อิสลาม)</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 transition-colors" data-synonyms="ต่ออายุ ประกัน หมดอายุ ต่อสัญญา ev อีวี รถไฟฟ้า sale ขาย">
+                            <td class="px-6 py-4 font-medium text-gray-950">3</td>
+                            <td class="px-6 py-4 text-gray-700 font-medium">แนวทางการประสานงานการต่ออายุกรมธรรม์รถยนต์</td>
+                            <td class="px-6 py-4"><span class="bg-green-50 text-green-700 px-2.5 py-1 rounded-full text-xs font-medium">Motor General</span></td>
+                            <td class="px-6 py-4 text-gray-500">ทีม Sale OB / แบ็คออฟฟิศ</td>
+                            <td class="px-6 py-4 text-gray-600 font-medium">ทันที (เมื่อวันคุ้มครองเหลือ 5 วัน)</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">รถไฟฟ้า EV ได้รับการดูแลเป็นกรณีพิเศษทันที ไม่ต้องรอเงื่อนไข 5 วัน</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 transition-colors" data-synonyms="ป่วย รักษา รพ คืนเงิน เบิก แอพ สุขภาพ jolly เจอลี่ หมอ">
+                            <td class="px-6 py-4 font-medium text-gray-950">4</td>
+                            <td class="px-6 py-4 text-gray-700 font-medium">ช่องทางในการยื่นเคลมประกันสุขภาพ</td>
+                            <td class="px-6 py-4"><span class="bg-purple-50 text-purple-700 px-2.5 py-1 rounded-full text-xs font-medium">Health Claim</span></td>
+                            <td class="px-6 py-4 text-gray-500">Jolly Application / Email</td>
+                            <td class="px-6 py-4 text-gray-600 font-medium">7-10 วันทำการ</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">ยื่นผ่าน Jolly App ได้เฉพาะยอดเคลมที่ไม่เกิน 20,000 บาท/ครั้ง</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 transition-colors" data-synonyms="แฟกซ์ เวลาทำการ เปิดปิด โรงพยาบาล ป่วย ใน เคลม โรงบาล fax แฟก">
+                            <td class="px-6 py-4 font-medium text-gray-950">5</td>
+                            <td class="px-6 py-4 text-gray-700 font-medium">เวลาการให้บริการ Fax Claim (กรณีผู้ป่วยใน)</td>
+                            <td class="px-6 py-4"><span class="bg-amber-50 text-amber-700 px-2.5 py-1 rounded-full text-xs font-medium">Crescent Health</span></td>
+                            <td class="px-6 py-4 text-gray-500">tpa-claims@hicrescent.com</td>
+                            <td class="px-6 py-4 text-gray-600 font-medium">พิจารณาภายในวันเดียวก่อนเวลาปิดทำการ</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">จ.-ศ. รับเคสสุดท้าย 18:00 น. / ส.-อา. รับเคสสุดท้าย 16:00 น.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="noDataMessage" class="hidden text-center py-8 text-gray-400 text-sm">
+                <span class="material-symbols-outlined block text-4xl mb-2">search_off</span>
+                ไม่พบข้อมูลที่ตรงกับคำค้นหาของคุณ
+            </div>
+
+        </section>
+    </div>
+
+    <script>
+        let fuseEngine;
+        let indexedRows = [];
+
+        // ทำการสร้างดัชนีข้อมูลเมื่อเว็บโหลดเสร็จเพื่อความรวดเร็วในการค้นหา
+        document.addEventListener("DOMContentLoaded", function() {
+            const rows = document.querySelectorAll('#dataTable tbody tr');
+            
+            rows.forEach((row) => {
+                // เก็บข้อความในทุกคอลัมน์ของแถวนั้นๆ
+                let textContent = row.textContent.toLowerCase();
+                // ดึงคำใกล้เคียงที่ผูกไว้ใน attribute data-synonyms
+                let synonyms = row.getAttribute('data-synonyms') ? row.getAttribute('data-synonyms').toLowerCase() : '';
+
+                indexedRows.push({
+                    element: row,
+                    text: textContent,
+                    synonyms: synonyms
+                });
+            });
+
+            // ตั้งค่าคอนฟิกของ Fuse.js สำหรับคำนวณคะแนนความน่าจะเป็น
+            const searchOptions = {
+                keys: ['text', 'synonyms'], // ค้นหาทั้งจากเนื้อหาจริงและคำพ้องความหมาย
+                threshold: 0.4,            // ค่าความยืดหยุ่น ยิ่งน้อยยิ่งต้องตรงตัว (0.4 คือกำลังพอดีสำหรับการพิมพ์ผิด/ใกล้เคียง)
+                ignoreLocation: true       // ค้นหาเจอไม่ว่าคีย์เวิร์ดจะอยู่ตำแหน่งต้นหรือท้ายประโยค
+            };
+
+            // เปิดใช้งานระบบค้นหาอัจฉริยะ
+            fuseEngine = new Fuse(indexedRows, searchOptions);
+        });
+
+        // ดักจับเหตุการณ์การพิมพ์ในช่อง Search
+        document.getElementById('searchInput').addEventListener('input', function() {
+            let queryText = this.value.trim();
+            const allRows = document.querySelectorAll('#dataTable tbody tr');
+            let noDataMsg = document.getElementById('noDataMessage');
+
+            // ถ้าช่องค้นหาว่าง ให้แสดงข้อมูลทุกแถวตามเดิม
+            if (queryText === '') {
+                allRows.forEach(row => row.style.display = '');
+                noDataMsg.classList.add('hidden');
+                return;
+            }
+
+            // ค้นหาแบบคำนวณความใกล้เคียงด้วย Fuse Engine
+            let searchResults = fuseEngine.search(queryText);
+
+            // ซ่อนข้อมูลทุกแถวก่อนเพื่อเตรียมกรองตัวที่ตรงผลลัพธ์
+            allRows.forEach(row => row.style.display = 'none');
+
+            if (searchResults.length > 0) {
+                // แสดงแถวที่คำนวณแล้วว่ามีความใกล้เคียงหรือตรงเงื่อนไข
+                searchResults.forEach(result => {
+                    result.item.element.style.display = '';
+                });
+                noDataMsg.classList.add('hidden');
+            } else {
+                // หากไม่มีข้อมูลที่เข้าเกณฑ์เลย ให้แสดงป้ายแจ้งเตือน
+                noDataMsg.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
